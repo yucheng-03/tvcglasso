@@ -56,13 +56,30 @@ systematically flattered CGLasso exactly where it is weakest.
 > in a Zebrafish Model.* JASA 118(544):1500–1514. doi:10.1080/01621459.2022.2164287
 
 Upstream: <https://github.com/yuanjiang-osu/Comp-gLASSO-JASA>. An earlier release of
-the same codebase is published by the same author under the MIT License at
+the same codebase is published by the same author **under the MIT License** at
 <https://github.com/yuanjiang-osu/Comp-gLASSO>.
 
-The file's header lists **every** difference from upstream, verified by diff: three
-functions renamed with a `cg_` prefix to avoid a namespace collision with our own
-engine, one `nr_max_iter` termination guard (the only semantic change), and
-`generate_cov` omitted. Nothing else was altered.
+**Relationship between the two upstream releases** (measured by diff, comments
+stripped). The five functions vendored here — `z_hat_offset`, `obj`, `NR`, `NR_para`
+and the alternating `Compo_glasso` loop — are all present in the MIT-licensed 2021
+release; the JASA release is a refinement of it. Restricted to the vendored
+functions, the JASA release differs from the MIT release in exactly four places:
+
+| Delta | JASA release |
+|---|---|
+| `z_hat_offset` | adds an `option == 0` branch |
+| `Compo_glasso` | `max_iter` default 100 → 50 |
+| parameter names | `ratio.z` / `ratio.O` → `z_ratio` / `O_ratio` |
+| robustness | two `is.na` guards inside the iteration |
+
+The remainder is the MIT-licensed code. We record this because attribution should be
+precise about which grant covers what, not because the distinction has ever been in
+dispute — the copyright holder is a co-author of the present work.
+
+**Our changes to the vendored file** are listed exhaustively in its header, verified
+by diff: three functions renamed with a `cg_` prefix to avoid a namespace collision
+with our own engine, one `nr_max_iter` termination guard (the only semantic change),
+and `generate_cov` omitted. Nothing else was altered.
 
 Everything else under `R/`, `simulation/`, `config/`, `analysis/` and `data/` is ours.
 

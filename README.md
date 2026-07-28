@@ -9,19 +9,22 @@ simulation comparison framework.
 
 ---
 
-## STATUS — pre-submission snapshot (private)
+## STATUS — pre-submission snapshot
 
-This is a **working snapshot for review**, not a finished public release. Three
-things are deliberately deferred until the manuscript is submitted and the
-arrangements are confirmed with all collaborators:
+This is a **working snapshot**, not a finished release. Three things are
+deliberately deferred until the manuscript is submitted and the arrangements are
+confirmed with all collaborators:
 
 | Deferred | Why | State today |
 |---|---|---|
-| **LICENSE** | Copyright in the code is shared with co-authors; one author should not license joint work unilaterally. | No `LICENSE` file. All rights reserved. |
+| **LICENSE** | Copyright in the code is shared with co-authors; one author should not license joint work unilaterally. | No `LICENSE` file yet, so default copyright applies. A license will be added at submission. |
 | **Zebrafish source data** | The tables belong to the study of Gaulke et al. (2019). | Held back; the cleaning **code** is here and regenerates everything from them. |
 | **Real-data results** | Not front-running our own submission. | `analysis/` ships the simulation leg; the zebrafish figure/table outputs are held. |
 
 Everything needed to reproduce the **simulation** results is present.
+
+`R/baselines/CompoGlasso.R` is third-party code; see [`PROVENANCE.md`](PROVENANCE.md)
+for its origin, its licensing, and the complete list of our changes to it.
 
 ---
 
