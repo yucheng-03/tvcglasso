@@ -1,0 +1,51 @@
+# ---------------------------------------------------------------------------
+# Generated results. Every .rds under results/ is reproducible from the
+# committed code plus the canonical seeds in config/paired_grid.R, and the
+# full grid is ~17 GB, so none of it is version-controlled.
+# ---------------------------------------------------------------------------
+/results/
+
+# ---------------------------------------------------------------------------
+# Zebrafish real data — HELD BACK FOR THIS PRE-SUBMISSION SNAPSHOT.
+#
+# The source tables belong to the study of Gaulke et al. (2019). They are
+# distributed publicly by the senior author at
+# https://github.com/yuanjiang-osu/Comp-gLASSO (MIT), and the copies used here
+# are byte-identical to that distribution — but we redistribute nothing until
+# the arrangement is confirmed with every collaborator (see STATUS in README).
+#
+# The cleaning CODE and its documentation ARE committed
+# (data/prepare_zebrafish.R, data/README.md); they regenerate everything below
+# from the source tables. To publish the data later, delete this block and run
+# `git add data/`.
+# ---------------------------------------------------------------------------
+/data/raw/
+/data/zebrafish_clean.rds
+/data/zebrafish_real_depths.rds
+
+# ---------------------------------------------------------------------------
+# Real-data DERIVED products of the same held-back cohort. These are estimation
+# results rather than source data, but they name genera and pair them with
+# infection group and sampling day, so they follow the same schedule as the
+# data itself.
+# ---------------------------------------------------------------------------
+/analysis/tables/tab05_zeb_*
+/analysis/figures/fig05_zeb_*
+/results/zebrafish/
+
+# R session junk
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user
+
+# Rcpp build artifacts
+*.o
+*.so
+*.dll
+
+# atomic-save temp files
+*.tmp.*
+
+# OS
+.DS_Store

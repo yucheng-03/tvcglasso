@@ -1,0 +1,5 @@
+"method","n_units","n_cells","seeds_min","seeds_max","git","R","core_hours","failed_total","failed_stale","failed_live"
+"tvcglasso",1600,16,1,100,"d6a9079","R version 4.4.3 (2025-02-28)",12630.8,0,0,0
+"CGLasso",1600,16,1,100,"d6a9079","R version 4.4.3 (2025-02-28)",737.6,25,25,0
+"tvmgm",1600,16,1,100,"d6a9079","R version 4.4.3 (2025-02-28)",116.3,0,0,0
+"JGL",800,8,1,100,"d6a9079","R version 4.4.3 (2025-02-28)",138.7,0,0,0
