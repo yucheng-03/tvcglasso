@@ -102,7 +102,10 @@ fit_one <- function(P, group) {
   ## axis. Do not recompute it here: `t` is the real sampling days rescaled to
   ## [0,1] with the irregular spacing preserved (days 7,10,21,30,43,59,86 are
   ## not equally spaced, and pretending they are would misplace the knots).
-  sl <- zeb_slices(clean, P = P, group = group, reference = "top_prevalence")
+  ## ALR denominator = NONE (the unassigned-genus reads), as in the published
+  ## preprocessing; the P most prevalent named genera are the nodes. Fits made
+  ## before 2026-09-28 used reference = "top_prevalence" (Aeromonas) instead.
+  sl <- zeb_slices(clean, P = P, group = group, reference = "NONE")
   X  <- sl$X; m <- length(X)
   days <- sl$days; xseq <- as.numeric(sl$t); n_per_slice <- sl$n_per_slice
   message(sprintf("\n=== %s : P=%d  m=%d  n per day = %s  (N=%d) ===",

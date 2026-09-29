@@ -141,7 +141,7 @@ Rscript data/prepare_zebrafish.R      # from the repo root
 which writes `data/zebrafish_clean.rds` (genus counts plus per-sample and
 per-taxon metadata) and `data/zebrafish_real_depths.rds`. Per-P model input is cut
 on demand with `zeb_slices(clean, P, group)` rather than cached. The script ends in
-an **assertion gate over 18 landmark quantities** — per-day sample counts, taxon
+an **assertion gate over 20 landmark quantities** — per-day sample counts, taxon
 counts at each prevalence threshold, depth quantiles, the P = 15 node set — so a
 drift in the raw data or the recipe is a hard failure rather than a silently
 different dataset.

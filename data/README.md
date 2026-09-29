@@ -99,20 +99,23 @@ spacing**. Nodes are ranked by prevalence, ties broken explicitly by relative
 abundance then alphabetically — without a stated rule the P = 25 boundary would
 be decided by the order genera happen to appear in `tax.tab`.
 
-**`NONE` is never a node.** It pools ASVs unassigned at genus level across
-unrelated lineages, so an edge to it would have no biological reading. It stays
-in `counts` (the reads are real, and depth must be the true library size) but is
-excluded from the node pool — which reproduces the node sets of every earlier
-analysis in this project exactly. `reference = "NONE"` switches to the published
-preprocessing's convention of using it as the ALR denominator.
+**`NONE` is never a node; by default it is the ALR denominator.** It pools ASVs
+unassigned at genus level across unrelated lineages, so an edge to it would have
+no biological reading. It stays in `counts` (the reads are real, and depth must
+be the true library size) and, as in the published preprocessing, serves as the
+reference taxon: the default `reference = "NONE"` puts it in the last column and
+makes the `P` most prevalent named genera the nodes. `reference =
+"top_prevalence"` uses the most prevalent named genus (Aeromonas) as the
+denominator instead and the next `P` named genera as nodes; every real-data fit
+in this project before 2026-09-28 used that setting.
 
 ## Guarantees
 
-`prepare_zebrafish.R` ends in an assertion gate over **18 landmarks** — per-day
+`prepare_zebrafish.R` ends in an assertion gate over **20 landmarks** — per-day
 counts per group (infected 7,10,11,13,14,13,13; not infected 23,20,19,17,15,17,15),
 genera above each prevalence threshold (43 / 25 / 16 at 5% / 10% / 20%), depth
 min–median–max (7,400 / 22,452 / 53,971), the reads in `NONE`, and the P = 15
-reference and node set. If the raw data or the recipe drifts it **fails** rather
+reference and node set under both denominators. If the raw data or the recipe drifts it **fails** rather
 than writing a different dataset underneath the analyses. Genus aggregation is
 also reconciled row-by-row against `asv.tab` for all 237 samples.
 

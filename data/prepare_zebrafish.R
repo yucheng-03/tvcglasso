@@ -56,10 +56,19 @@ EXPECT <- list(
   # Guards TRAP (3): if the unassigned-genus column is ever silently zeroed
   # again, this is the check that fails.
   none_total_reads = 134761,
-  reference        = "Aeromonas",
-  # The P = 15 node set. Asserted because it must stay identical to the node set
-  # every earlier real-data analysis in this project used.
-  nodes_P15 = c("Cetobacterium", "Pseudomonas", "Plesiomonas", "ZOR0006",
+  # The default ALR denominator and the P = 15 node set under it: NONE, as in the
+  # published preprocessing, with the 15 most prevalent named genera as nodes.
+  reference        = "NONE",
+  nodes_P15 = c("Aeromonas", "Cetobacterium", "Pseudomonas", "Plesiomonas",
+                "ZOR0006", "Acinetobacter", "Shewanella", "Paucibacter",
+                "Chitinibacter", "Crenobacter", "Flavobacterium", "Mycoplasma",
+                "Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium",
+                "Cloacibacterium", "Fluviicola"),
+  # The alternative denominator (reference = "top_prevalence") and its P = 15
+  # node set. Every real-data fit before 2026-09-28 used this setting, so it is
+  # asserted too: those results must stay reproducible.
+  reference_top_prevalence = "Aeromonas",
+  nodes_P15_top_prevalence = c("Cetobacterium", "Pseudomonas", "Plesiomonas", "ZOR0006",
                 "Acinetobacter", "Shewanella", "Paucibacter", "Chitinibacter",
                 "Crenobacter", "Flavobacterium", "Mycoplasma",
                 "Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium",
@@ -263,19 +272,19 @@ zeb_rank_taxa <- function(clean) {
 #' taxa$lineage_ambiguous is TRUE for it) — so an estimated edge to it would
 #' have no biological reading. It is kept in the cleaned counts (the reads are
 #' real and the depth must be the true library size) but excluded from the node
-#' pool. Excluding it reproduces the node sets of every earlier analysis in this
-#' project EXACTLY at both P = 15 and P = 25; letting it compete on prevalence
-#' would rank it 3rd and displace a real genus (Phreatobacter at P = 15,
-#' Ignatzschineria at P = 25).
+#' pool; letting it compete on prevalence would rank it 3rd and displace a real
+#' genus. By default it is the ALR denominator instead.
 #'
 #' @param P number of network nodes (the reference is additional).
 #' @param reference which taxon becomes the ALR denominator.
-#'   "top_prevalence" (default): the most prevalent NAMED genus (Aeromonas,
-#'     present in 99.5% of samples); the next P named genera are the nodes.
-#'   "NONE": the pooled unassigned column, which is what the published
-#'     preprocessing uses; the top P named genera are then all nodes.
+#'   "NONE" (default): the pooled unassigned column, which is what the published
+#'     preprocessing uses (Tian et al. 2023); the top P named genera are then all
+#'     nodes.
+#'   "top_prevalence": the most prevalent NAMED genus (Aeromonas, present in
+#'     99.5% of samples); the next P named genera are the nodes. This was the
+#'     default until 2026-09-28, so every real-data fit before that date used it.
 zeb_slices <- function(clean, P = 15L, group = c("infected", "not_infected"),
-                       reference = c("top_prevalence", "NONE")) {
+                       reference = c("NONE", "top_prevalence")) {
   group     <- match.arg(group)
   reference <- match.arg(reference)
   named     <- setdiff(zeb_rank_taxa(clean), "NONE")   # NONE is never a node
@@ -347,11 +356,15 @@ main <- function() {
     sum(clean$counts[, "NONE"])     == EXPECT$none_total_reads
   )
   p15 <- zeb_slices(clean, 15L, "infected")
+  p15_tp <- zeb_slices(clean, 15L, "infected", reference = "top_prevalence")
   stopifnot(identical(p15$reference, EXPECT$reference),
             setequal(p15$nodes, EXPECT$nodes_P15),
-            length(p15$nodes) == 15L)
+            length(p15$nodes) == 15L,
+            identical(p15_tp$reference, EXPECT$reference_top_prevalence),
+            setequal(p15_tp$nodes, EXPECT$nodes_P15_top_prevalence),
+            length(p15_tp$nodes) == 15L)
   cat("verification gate: PASSED (", length(EXPECT), " landmark checks incl. the ",
-      "P=15 node set and the unassigned-read total)\n", sep = "")
+      "P=15 node set under both denominators and the unassigned-read total)\n", sep = "")
 
   ## --- provenance --------------------------------------------------------
   src <- file.path(RAW_DIR, c("asv.tab", "tax.tab", "metadata.tab"))
